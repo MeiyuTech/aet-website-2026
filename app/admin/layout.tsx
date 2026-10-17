@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { isEvalEnabled, isLocalHost } from "@/lib/eval/server";
+import { isEvalEnabled, isLocalHost } from "@/lib/eval/server/access";
 import "../fonts.css";
 import "../theme.css";
 import "./eval/eval.css";

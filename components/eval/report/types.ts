@@ -6,7 +6,7 @@
  * update function signatures for type-safe data mutations.
  */
 
-import { SampleData, Course, GradeConversionRow, CredentialDocument } from "@/lib/eval/report-data"
+import { SampleData, Course, GradeConversionRow, CredentialDocument } from "@/lib/eval/domain/report"
 
 export type { SampleData, Course, GradeConversionRow, CredentialDocument }
 

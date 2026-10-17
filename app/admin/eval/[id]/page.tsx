@@ -1,4 +1,4 @@
-import { EvalEditor } from "@/components/eval/editor";
+import { EvalEditor } from "@/components/eval/workspace/editor";
 import { notFound } from "next/navigation";
 export default async function Page({
   params,

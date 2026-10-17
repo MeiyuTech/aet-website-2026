@@ -21,7 +21,7 @@
  */
 
 import { RefObject } from "react"
-import { type Course, type SampleData } from "@/lib/eval/report-data"
+import { type Course, type SampleData } from "@/lib/eval/domain/report"
 
 import { Header } from "../sections/header"
 import { Footer } from "../sections/footer"

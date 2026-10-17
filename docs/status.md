@@ -1,5 +1,29 @@
 # AET Implementation Status
 
+## 2026-10-17 — AET Eval structural refactor
+
+- Implemented the completed Phase 1 items in
+  [AET Eval refactor checklist](aet-eval-refactor-checklist.md), including the
+  current directory map, dependency rules, future Agent checklist, and evidence.
+- Split pure domain rules, browser API utilities, server infrastructure, persistence
+  repositories, services, Gemini provider, Word renderer, and HTTP dispatcher.
+  Extracted the shared draft hook, toolbar, history panel, and PDF import dialog;
+  retained inline HTML editing and one draft across panels.
+- Existing routes, report JSON, atomic save/archive RPCs, theme, access guards,
+  private asset locations, and database schema remain compatible. Removed three
+  unused inherited implementations after verifying they had no consumers.
+- `pnpm check:eval` passes 11 domain/security checks, 13 mocked server checks and
+  the dependency-boundary check. Typecheck, localization and whitespace checks pass.
+  Live read APIs and synthetic Word export passed using the existing port 3023 server.
+- In-app browser passed desktop 1440px and mobile 390/320px: shared edits, panel
+  retention, save/reload, history restore, preview and import dialog. No page overflow
+  or console errors/warnings. Only the existing archived QA report was saved and
+  restored, leaving two QA history revisions. Original reports were not edited.
+- Screenshots: `output/playwright/aet-eval-refactor-desktop.png` and
+  `output/playwright/aet-eval-refactor-mobile.png`. No production build,
+  deployment or server restart. Agent jobs, approval and employee login are
+  not implemented; live AI success still depends on resolving provider billing.
+
 ## 2026-10-17 — AET Eval inline report editing
 
 - Reports now open directly in the editable HTML document. Applicant, credential,

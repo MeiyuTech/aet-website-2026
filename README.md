@@ -384,3 +384,10 @@ least 50,000 pixels, excluding archived reports, reviews, certificates and logos
 Recheck image relevance against the article when its content changes. Missing
 verified author, image or date information stays absent from Article markup.
 The publication dates continue to come from the original-source date catalog.
+
+### AET Eval architecture and roadmap
+
+See [the refactor checklist](docs/aet-eval-refactor-checklist.md) for the current
+module structure, dependency boundaries, preserved behavior, verification evidence,
+and the pending document-driven Agent workflow. Run `pnpm check:eval` for synthetic,
+network-free domain, server-contract and module-boundary checks.

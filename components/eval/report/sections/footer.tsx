@@ -1,4 +1,4 @@
-import { SampleData } from "@/lib/eval/report-data"
+import { SampleData } from "@/lib/eval/domain/report"
 
 type FooterProps = {
     pageIndex: number

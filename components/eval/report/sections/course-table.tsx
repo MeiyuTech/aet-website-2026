@@ -3,7 +3,7 @@ import { Trash2, Plus, StickyNote } from "lucide-react";
 import CourseNotes from "./course-table-notes";
 import { EditableInput, EditableTextarea } from "../ui/editable-elements";
 import { Course, UpdateCourseRow } from "../types";
-import { toCourseTitleCase } from "@/lib/eval/title-case";
+import { toCourseTitleCase } from "@/lib/eval/domain/title-case";
 
 type CourseTableProps = {
   courses: Course[];
