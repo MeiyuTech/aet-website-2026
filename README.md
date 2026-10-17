@@ -389,5 +389,6 @@ The publication dates continue to come from the original-source date catalog.
 
 See [the refactor checklist](docs/aet-eval-refactor-checklist.md) for the current
 module structure, dependency boundaries, preserved behavior, verification evidence,
-and the pending document-driven Agent workflow. Run `pnpm check:eval` for synthetic,
+and the document-driven Agent roadmap. See [Agent setup](docs/aet-eval-agent.md)
+for OpenAI configuration and the required generation worker. Run `pnpm check:eval` for synthetic,
 network-free domain, server-contract and module-boundary checks.

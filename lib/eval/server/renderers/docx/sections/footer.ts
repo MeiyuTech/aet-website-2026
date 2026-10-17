@@ -11,14 +11,14 @@ import { COLORS } from '@/lib/eval/server/renderers/docx/styles'
  * Create the page footer with page number
  * Format: "Page X of Y"
  */
-export function createPageFooter(): Footer {
+export function createPageFooter(draft = false): Footer {
     return new Footer({
         children: [
             new Paragraph({
                 alignment: AlignmentType.CENTER,
                 children: [
                     new TextRun({
-                        text: 'Page ',
+                        text: draft ? 'DRAFT - For review only | Page ' : 'Page ',
                         size: 18,
                         color: COLORS.gray500,
                         font: 'Arial',

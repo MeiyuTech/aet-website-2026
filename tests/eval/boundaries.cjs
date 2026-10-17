@@ -31,7 +31,7 @@ function walk(file, seen = new Set()) {
   assert.doesNotMatch(source, /import ["']server-only["']/);
   assert.doesNotMatch(
     source,
-    /EVAL_SUPABASE_SERVICE_ROLE_KEY|EVAL_GEMINI_API_KEY/,
+    /EVAL_SUPABASE_SERVICE_ROLE_KEY|EVAL_GEMINI_API_KEY|EVAL_OPENAI_API_KEY/,
   );
   for (const match of source.matchAll(/from\s+["']([^"']+)["']/g)) {
     const spec = match[1];
@@ -58,7 +58,13 @@ for (const file of files(path.join(root, "lib/eval/domain"))) {
     /from ["'](?:react|next|node:|@\/components|.*\/server\/)/,
   );
 }
-for (const folder of ["services", "repositories", "models", "renderers"]) {
+for (const folder of [
+  "services",
+  "repositories",
+  "models",
+  "renderers",
+  "agent",
+]) {
   for (const file of files(path.join(root, "lib/eval/server", folder))) {
     assert.doesNotMatch(
       fs.readFileSync(file, "utf8"),

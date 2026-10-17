@@ -15,6 +15,23 @@ export async function db<T>(path: string, init: RequestInit = {}): Promise<T> {
       );
     if (failure.message === "EVAL_NOT_FOUND")
       throw new EvalError("Report not found.", 404);
+    const workflowErrors: Record<string, string> = {
+      EVAL_MATERIAL_LIMIT: "A material set can contain up to 8 files.",
+      EVAL_NO_MATERIALS: "Upload source files before confirming.",
+      EVAL_ACTIVE_RUN:
+        "A newer or active generation exists. Refresh the workflow.",
+      EVAL_MATERIALS_CHANGED:
+        "The material set changed. Confirm the current files to generate again.",
+      EVAL_LEASE_LOST:
+        "The generation was cancelled or resumed by another worker.",
+      EVAL_BUDGET:
+        "This run reached its model-call limit. Review the files before starting again.",
+      EVAL_INVALID_STATE:
+        "This action is no longer available. Refresh the workflow.",
+      EVAL_REVIEW_REQUIRED: "Human review is required before approval.",
+    };
+    if (workflowErrors[failure.message])
+      throw new EvalError(workflowErrors[failure.message], 409);
     // Never return database details, credentials, or private report content.
     throw new EvalError(
       "The database request could not be completed. Please retry.",

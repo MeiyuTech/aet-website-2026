@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "check:i18n": "node scripts/check-i18n.mjs",
     "dev:eval": "next dev --hostname localhost --port 3023",
-    "check:eval": "node scripts/check-eval.cjs"
+    "check:eval": "node scripts/check-eval.cjs",
+    "worker:eval": "NODE_ENV=development node --env-file=.env.local --conditions=react-server --import tsx workers/eval/worker.ts"
   },
   "dependencies": {
     "@google/genai": "1.37.0",
@@ -24,6 +25,7 @@
     "next-intl": "^4.14.7",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "server-only": "0.0.1",
     "tailwind-merge": "3.4.0",
     "zod": "3.25.76",
     "zod-to-json-schema": "3.25.1"
@@ -34,6 +36,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "tailwindcss": "4.1.18",
+    "tsx": "4.23.15",
     "typescript": "^5.9.0"
   },
   "packageManager": "pnpm@9.7.1"

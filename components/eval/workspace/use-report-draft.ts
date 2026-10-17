@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { buildSampleData, type SampleData } from "@/lib/eval/domain/report";
 import type { SavedReport } from "@/lib/eval/domain/records";
 import { evalRequest } from "@/lib/eval/client/api";
@@ -13,16 +13,27 @@ export function useReportDraft(reportId: string) {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const dirty = !!data && JSON.stringify({ name, content: data }) !== baseline;
+  const currentDraft = useRef("");
+  currentDraft.current = JSON.stringify({ name, data });
   async function load() {
+    const startedWith = currentDraft.current;
     setError("");
     try {
-      if (reportId === "new") {
+      if (reportId === "new" && !record) {
         const content = buildSampleData();
         setId(crypto.randomUUID());
         setData(content);
         setBaseline(JSON.stringify({ name: "Untitled evaluation", content }));
       } else {
-        const row = await evalRequest<SavedReport>(`reports/${reportId}`);
+        const row = await evalRequest<SavedReport>(
+          `reports/${reportId === "new" ? record?.id : reportId}`,
+        );
+        if (currentDraft.current !== startedWith) {
+          setNotice(
+            "A saved version is available. Your edits made during loading were kept.",
+          );
+          return;
+        }
         setRecord(row);
         setId(row.id);
         setName(row.name || "Untitled evaluation");
@@ -96,7 +107,7 @@ export function useReportDraft(reportId: string) {
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement("a");
       link.href = url;
-      link.download = `${(name || "AET Evaluation").replace(/[\\/:*?"<>|]/g, "-")}.docx`;
+      link.download = `DRAFT-${(name || "AET Evaluation").replace(/[\\/:*?"<>|]/g, "-")}.docx`;
       link.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (e) {

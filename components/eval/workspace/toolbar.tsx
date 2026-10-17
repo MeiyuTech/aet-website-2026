@@ -1,6 +1,7 @@
 "use client";
 import {
   Download,
+  FileCheck2,
   Printer,
   Eye,
   PencilLine,
@@ -8,7 +9,7 @@ import {
   Sparkles,
   History,
 } from "lucide-react";
-export type WorkspacePanel = "fields" | "ai" | "history" | null;
+export type WorkspacePanel = "workflow" | "fields" | "ai" | "history" | null;
 export type WorkspaceMode = "edit" | "preview";
 type Props = {
   mode: WorkspaceMode;
@@ -66,7 +67,7 @@ export function WorkspaceToolbar({
           onClick={exportDocx}
           disabled={!!busy}
         >
-          <Download size={16} /> Word
+          <Download size={16} /> Draft Word
         </button>
         <button
           className="eval-tool-button"
@@ -84,6 +85,7 @@ export function WorkspaceToolbar({
         <span className="eval-tool-divider" aria-hidden="true" />
         {(
           [
+            ["workflow", "Materials", FileCheck2],
             ["fields", "Fields", PanelRight],
             ["ai", "AI assistant", Sparkles],
             ["history", "History", History],

@@ -1,5 +1,42 @@
 # AET Implementation Status
 
+## 2026-10-17 — AET Eval document-driven generation
+
+- Implemented the local Phase 2 flow in [the checklist](aet-eval-refactor-checklist.md).
+  [Agent setup](aet-eval-agent.md) documents the OpenAI adapter, private source storage,
+  durable runs, background worker, template/rule snapshots and human approval.
+- Added a Materials & review panel while retaining inline HTML editing. Confirmation
+  freezes the uploaded set; first blank reports fill automatically, regeneration
+  requires field-level difference review and explicit apply. Failed runs retain
+  extraction checkpoints and support retry/cancellation within a call budget.
+- Applied the additive migration and created the private source bucket in the
+  designated Supabase project. New tables/RPCs deny browser roles; security advisor
+  reports intentional RLS-without-policies for these server-only tables. Unrelated
+  pre-existing project advisories were not changed.
+- Two live OpenAI runs used only a fictional one-page transcript in the existing
+  archived QA fixture. The corrected run preserved both original courses, grades
+  and semester credits; deterministic totals were 6.00 credits and GPA 3.50.
+  The model withheld a real equivalency because the source is explicitly fictional.
+- Browser testing covered upload, confirmation, automatic draft fill, regeneration
+  differences, explicit apply, inline edits/save, review acknowledgment and a
+  synthetic-only approval. Approved Word downloaded successfully; its ZIP/XML and
+  content passed checks, while ordinary Word includes a draft footer. A subsequent
+  saved edit invalidated approval and official export returned 409.
+- `tests/eval/workflow.sql` passed against the target database and rolled back all
+  transaction fixtures. It covers deduplication, idempotency, lease exclusion,
+  cancellation, retry, concurrent-edit protection, snapshot/material consistency
+  and browser-role restrictions. Network-free regression suites, typecheck and
+  localization checks pass. No production build or deployment.
+- Desktop 1440px and mobile 390/320px visual checks use the existing port 3023 server.
+  Sources and review controls remain reachable; a narrow-screen action overflow was
+  corrected. Screenshots are in `output/playwright/aet-eval-agent-desktop.png` and
+  `output/playwright/aet-eval-agent-mobile.png`.
+- Scope limits: one fixed course-by-course template; migrated rules remain unreviewed;
+  reviewer names are local/unverified, employee login is deferred. Large/complex
+  real-world transcripts, actual printer output and Word pagination fidelity are
+  not certified by these smoke tests. Existing client reports were not edited;
+  synthetic run/approval/revision records remain for inspection.
+
 ## 2026-10-17 — AET Eval structural refactor
 
 - Implemented the completed Phase 1 items in

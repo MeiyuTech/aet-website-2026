@@ -10,6 +10,7 @@ import { ReportForm } from "../panels/fields-panel";
 import { ReportCanvas } from "../report/report-canvas";
 import { Assistant } from "../panels/assistant-panel";
 import { HistoryPanel } from "../panels/history-panel";
+import { WorkflowPanel } from "../panels/workflow-panel";
 import { PdfImportDialog } from "../imports/pdf-import-dialog";
 import {
   WorkspaceToolbar,
@@ -120,11 +121,11 @@ export function EvalEditor({ reportId }: { reportId: string }) {
               className="eval-button"
               disabled={!!busy || !data}
               onClick={() => {
-                setImportOpen(true);
+                setPanel("workflow");
               }}
             >
               <Upload size={17} />
-              Import PDF
+              Materials & review
             </button>
             <button
               className="eval-button primary"
@@ -172,6 +173,10 @@ export function EvalEditor({ reportId }: { reportId: string }) {
             />
             <div className={`eval-editor-body ${panel ? "with-panel" : ""}`}>
               <div className="eval-edit-panel">
+                <div className="eval-draft-print-label">
+                  DRAFT · For review only. Approved documents are downloaded
+                  from Materials &amp; review.
+                </div>
                 <div className="eval-canvas-caption no-print">
                   <span>
                     {mode === "edit"
@@ -205,11 +210,13 @@ export function EvalEditor({ reportId }: { reportId: string }) {
               >
                 <div className="eval-panel-heading">
                   <strong>
-                    {panel === "fields"
-                      ? "Report fields"
-                      : panel === "ai"
-                        ? "AI assistant"
-                        : "Version history"}
+                    {panel === "workflow"
+                      ? "Materials & review"
+                      : panel === "fields"
+                        ? "Report fields"
+                        : panel === "ai"
+                          ? "AI assistant"
+                          : "Version history"}
                   </strong>
                   <button
                     className="eval-icon-button"
@@ -220,7 +227,23 @@ export function EvalEditor({ reportId }: { reportId: string }) {
                     <X size={18} />
                   </button>
                 </div>
+                <WorkflowPanel
+                  record={record}
+                  data={data}
+                  dirty={dirty}
+                  busy={busy}
+                  setBusy={setBusy}
+                  active={panel === "workflow"}
+                  onLoad={load}
+                />
                 <div hidden={panel !== "fields"}>
+                  <button
+                    className="eval-button"
+                    disabled={!!busy}
+                    onClick={() => setImportOpen(true)}
+                  >
+                    Legacy PDF import
+                  </button>
                   <label className="eval-panel-section-picker">
                     Section
                     <select

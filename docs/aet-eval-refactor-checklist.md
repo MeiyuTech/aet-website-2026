@@ -3,7 +3,7 @@
 ## Scope and invariants
 
 Prepare the existing Eval application for a document-driven generation workflow.
-This phase changes code organization, not the report format or product workflow.
+Phase 1 changed code organization. Phase 2 adds the workflow described below.
 
 - Work in the existing `x/aet-eval` worktree.
 - Preserve `/admin/eval`, existing API URLs, migrated report JSON, and database RPCs.
@@ -11,10 +11,11 @@ This phase changes code organization, not the report format or product workflow.
   collapsible Fields/AI/History, review-before-apply, and unsent AI messages.
 - Preserve the 2026 theme, Letter report, Word output, GPA rules, revision history,
   archive recovery, local-only access, same-origin writes, and private attachments.
-- Preserve database schema and original report data; reuse archived synthetic QA reports
+- Preserve existing schema contracts and original report data; use additive workflow tables
+  in Phase 2 and reuse archived synthetic QA reports
   for save/recovery checks. Do not introduce employee login, deploy, or push.
 
-## Phase 1 — Structural refactor (current work)
+## Phase 1 — Structural refactor (completed)
 
 - [x] Separate pure domain types, validation, edits, GPA, and parsed-document mapping.
 - [x] Extract browser API utilities from presentation components.
@@ -34,20 +35,21 @@ This phase changes code organization, not the report format or product workflow.
       preview, and save/reload in the in-app browser.
 - [x] Document the implemented structure and verification limits.
 
-## Phase 2 — Document-driven Agent (future, not implemented here)
+## Phase 2 — Document-driven Agent (implemented local workflow)
 
-- [ ] Add durable document storage, upload batches, and explicit upload-complete action.
-- [ ] Freeze a material-set revision and select the report template automatically or by choice.
-- [ ] Add persisted generation runs/steps with idempotency, retry, cancellation, and budgets.
-- [ ] Run extraction, evidence mapping, approved-rule conversion, report drafting, and checks.
-- [ ] Track source file/page evidence, conflicting facts, missing materials, and assumptions.
-- [ ] Version templates and conversion rules; do not automatically trust migrated rules.
-- [ ] Produce a full pending-review HTML draft without asking users to formulate a goal.
-- [ ] Protect human edits on regeneration with proposed differences and explicit apply.
-- [ ] Add human review and approval of a frozen report/material/template/rule snapshot.
-- [ ] Require renewed approval after changes and export official documents only from approval.
+- [x] Add durable document storage, upload batches, and explicit upload-complete action.
+- [x] Freeze a material-set revision and use the fixed course-by-course template version.
+- [x] Add persisted generation runs/steps with idempotency, retry, cancellation, and budgets.
+- [x] Run extraction, evidence mapping, proposed conversions, report drafting and checks.
+- [ ] Curate and approve conversion rules; migrated rules remain unreviewed references.
+- [x] Track source file/page evidence, conflicting facts, missing materials, and assumptions.
+- [x] Version templates and conversion rules; do not automatically trust migrated rules.
+- [x] Produce a full pending-review HTML draft without asking users to formulate a goal.
+- [x] Protect human edits on regeneration with proposed differences and explicit apply.
+- [x] Add human review and approval of a frozen report/material/template/rule snapshot.
+- [x] Require renewed approval after changes and export official documents only from approval.
 - [ ] Introduce accountable reviewer identity before multi-user approvals (employee login deferred).
-- [ ] Add background workers and progress/recovery UI only when durable generation is implemented.
+- [x] Add background workers and progress/recovery UI only when durable generation is implemented.
 
 ## Implemented structure
 
@@ -187,3 +189,22 @@ flowchart LR
   future work; current exports preserve the existing draft-export behavior.
 - Implementation and verification were completed in `x/aet-eval`. Delivery is tracked
   in Git; this refactor does not deploy or change production.
+
+## Phase 2 implementation notes
+
+See [Document-driven generation](aet-eval-agent.md) for the added modules, setup,
+workflow diagram, review boundaries and verification. The directory map above
+records the completed Phase 1 baseline; the new Agent guide describes the additions.
+Employee login remains deferred. Local reviewer names are not authenticated identities.
+
+### Phase 2 verification — 2026-10-17
+
+- Passed 11 domain checks, 13 server checks, 11 generation checks and dependency boundaries.
+- Passed transactional workflow SQL checks with rollback, typecheck and localization.
+- Real Responses API: two synthetic-document runs; corrected extraction preserves
+  semester-credit and grade legends. Both courses are retained; GPA is 3.50.
+- In-app desktop/mobile: upload, explicit confirmation, automatic fill, regeneration
+  difference review, inline editing, synthetic approval and Word download verified.
+- Unapproved and subsequently changed reports return 409 for official export. Draft
+  exports contain a draft footer; approved exports use the saved approval snapshot.
+- No original client report was changed. Synthetic QA history is retained.

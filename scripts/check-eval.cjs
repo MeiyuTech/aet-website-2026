@@ -1,7 +1,12 @@
 /* Compatibility entry point. All fixtures are synthetic and network-free. */
 const { spawnSync } = require("node:child_process");
 const path = require("node:path");
-for (const suite of ["domain.cjs", "server.cjs", "boundaries.cjs"]) {
+for (const suite of [
+  "domain.cjs",
+  "server.cjs",
+  "generation.cjs",
+  "boundaries.cjs",
+]) {
   const result = spawnSync(
     process.execPath,
     [path.resolve(__dirname, "../tests/eval", suite)],

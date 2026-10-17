@@ -26,6 +26,7 @@ import { createAboutAetPage } from '@/lib/eval/server/renderers/docx/sections/ab
 import { createPageFooter } from '@/lib/eval/server/renderers/docx/sections/footer'
 
 export type GenerateDocxOptions = {
+    draft?: boolean
     includeNotes?: boolean
     includeReferences?: boolean
 }
@@ -116,7 +117,7 @@ export async function generateDocx(
                     default: pageHeader,
                 },
                 footers: {
-                    default: createPageFooter(),
+                    default: createPageFooter(options.draft),
                 },
                 children,
             },

@@ -37,8 +37,8 @@ export function calculateStats(courses: Course[]) {
     let gpaCredits = 0
 
     for (const course of courses) {
-        // Use US credits for calculation
-        const creditsStr = (course.usCredits || course.credits || "0").trim()
+        // An explicit blank conversion stays missing; only legacy absent fields fall back.
+        const creditsStr = (course.usCredits ?? course.credits ?? "0").trim()
 
         // Check if credits are wrapped in parentheses (e.g., "(9.00)")
         // These credits should NOT be counted in totalCredits
@@ -54,7 +54,7 @@ export function calculateStats(courses: Course[]) {
         if (!Number.isFinite(credits) || credits < 0) continue
 
         // Use US grade for calculation
-        let grade = (course.usGrade || course.grade || "").trim().toUpperCase()
+        let grade = (course.usGrade ?? course.grade ?? "").trim().toUpperCase()
 
         // Normalize grade
         if (ALIASES.hasOwnProperty(grade)) {

@@ -1588,3 +1588,41 @@
     min-height: 0 !important;
   }
 }
+
+/* Document-driven generation uses the existing theme and report canvas. */
+.eval-workflow { padding: 20px; font-size: 13px; line-height: 1.55; }
+.eval-workflow section + section { border-top: 1px solid var(--eval-border, #dce4ea); margin-top: 24px; padding-top: 20px; }
+.eval-workflow h3 { font-size: 16px; color: #163b59; margin: 0 0 10px; }
+.eval-workflow p { margin: 8px 0 14px; }
+.eval-workflow .eval-button { white-space: normal; text-align: left; margin: 8px 0; }
+.eval-workflow label:not(.eval-check):not(.eval-upload-label) { display: grid; gap: 6px; margin-top: 14px; font-weight: 600; }
+.eval-workflow input:not([type=checkbox]):not([type=file]), .eval-workflow textarea { width: 100%; border: 1px solid #cbd5df; border-radius: 8px; padding: 10px; font: inherit; background: white; }
+.eval-check { display: flex; align-items: flex-start; gap: 10px; margin: 14px 0; font-weight: 400; }
+.eval-check input { margin-top: 4px; flex: 0 0 auto; }
+.eval-upload-label { position: relative; overflow: hidden; cursor: pointer; }
+.eval-workflow .eval-upload-label input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; }
+.eval-upload-label:focus-within { outline: 2px solid #225f88; outline-offset: 3px; }
+.eval-upload-label.disabled { opacity: .5; cursor: default; }
+.eval-source-list { list-style: none; padding: 0; }
+.eval-source-list li { display: flex; align-items: center; gap: 8px; justify-content: space-between; border-bottom: 1px solid #e2e8ee; padding: 10px 0; }
+.eval-source-list li div { min-width: 0; }
+.eval-source-list a { overflow-wrap: anywhere; color: #205e85; }
+.eval-source-list small { display: block; color: #617384; }
+.eval-run-status { display: flex; align-items: center; gap: 8px; font-weight: 600; color: #164c66; }
+.eval-workflow details { margin: 12px 0; }
+.eval-workflow summary { cursor: pointer; color: #245c80; }
+.eval-difference pre { max-height: 240px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; background: #f3f6f8; padding: 10px; font-size: 11px; }
+.eval-evidence-item { border-bottom: 1px solid #e2e8ee; padding: 12px 0; overflow-wrap: anywhere; }
+.eval-evidence-item blockquote { margin: 8px 0; padding-left: 10px; border-left: 3px solid #c6d9e5; }
+.eval-draft-print-label { padding: 10px; text-align: center; font-size: 11px; color: #64748b; }
+@media print { .eval-draft-print-label { display: block; color: #444; font-size: 9pt; } }
+
+.eval-field-difference { padding: 12px 0; border-bottom: 1px solid #dce4ea; overflow-wrap: anywhere; }
+.eval-field-difference > strong { text-transform: capitalize; font-size: 12px; }
+.eval-field-difference p { background: #f3f6f8; padding: 8px; margin: 6px 0; }
+.eval-field-difference span { display: block; font-size: 10px; font-weight: 600; color: #5c7486; text-transform: uppercase; }
+
+@media (max-width: 420px) {
+  .eval-editor-actions { flex-wrap: wrap; }
+  .eval-editor-actions .eval-button { min-width: 0; white-space: normal; justify-content: center; }
+}

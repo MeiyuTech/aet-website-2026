@@ -17,6 +17,14 @@ import { analyzePdfWithGemini } from "../services/pdf";
 import { readAttachment, uploadAttachment } from "../services/attachments";
 import { reportAsset } from "../services/assets";
 import { exportReport } from "../services/exports";
+import {
+  workflowState,
+  generationAction,
+  approveReport,
+  approvedExport,
+} from "../services/generation";
+import { uploadDocument, readSource } from "../services/documents";
+import { documents, selectDocument } from "../repositories/generation";
 export type EvalRouteContext = { params: Promise<{ path?: string[] }> };
 export async function handle(request: Request, context: EvalRouteContext) {
   try {
@@ -26,6 +34,29 @@ export async function handle(request: Request, context: EvalRouteContext) {
     const url = new URL(request.url);
     if (parts.length > 2) throw new EvalError("Not found", 404);
     if (request.method === "GET") {
+      if (area === "workflow" && id) return json(await workflowState(id));
+      if (area === "approved" && id)
+        return binary(
+          await approvedExport(id),
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          {
+            "Content-Disposition":
+              'attachment; filename="AET-Approved-Evaluation.docx"',
+          },
+        );
+      if (area === "source" && id) {
+        uuid.parse(id);
+        const reportId = uuid.parse(url.searchParams.get("reportId"));
+        await getReport(reportId);
+        const document = (await documents(reportId)).find(
+          (doc) => doc.id === id,
+        );
+        if (!document) throw new EvalError("Document not found.", 404);
+        return binary(await readSource(document), document.mime, {
+          "Content-Disposition": `attachment; filename*=UTF-8''${encodeURIComponent(document.name)}`,
+          "Content-Security-Policy": "default-src 'none'; sandbox",
+        });
+      }
       if (area === "reports" && !id)
         return json(
           await reportList(
@@ -64,6 +95,15 @@ export async function handle(request: Request, context: EvalRouteContext) {
       }
     }
     if (request.method === "POST") {
+      if (area === "generation" && id)
+        return json(await generationAction(id, await jsonBody(request)));
+      if (area === "approval" && id)
+        return json(await approveReport(id, await jsonBody(request)));
+      if (area === "documents" && id) {
+        uuid.parse(id);
+        const { file, bytes } = await form(request, 20 * 1024 * 1024);
+        return json(await uploadDocument(id, file, bytes));
+      }
       if (area === "reports" && !id)
         return json(
           await saveReport(SaveSchema.parse(await jsonBody(request))),
@@ -99,6 +139,14 @@ export async function handle(request: Request, context: EvalRouteContext) {
         return json(
           await askAssistant(AssistantSchema.parse(await jsonBody(request))),
         );
+    }
+    if (request.method === "PATCH" && area === "documents" && id) {
+      await getReport(id);
+      const input = z
+        .object({ id: uuid, excluded: z.boolean() })
+        .parse(await jsonBody(request));
+      await selectDocument(id, input.id, input.excluded);
+      return json({ ok: true });
     }
     if (request.method === "PATCH" && area === "reports" && id) {
       uuid.parse(id);
